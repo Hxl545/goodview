@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>GoodView v4 – Formatted and split</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="top">
+      <header>
+        <a class="logo" href="#/"
+          ><i
+            ><svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#fff"
+              stroke-width="2"
+              stroke-linejoin="round"
+            >
+              <path d="M7 4l13 8-13 8z" /></svg></i
+          ><span><b>GoodView</b><small>WATCH AT YOUR PACE</small></span></a
+        >
+        <input
+          class="search"
+          id="q"
+          type="search"
+          placeholder="Search videos"
+          aria-label="Search videos"
+        />
+        <button class="btn red signin" id="signin">Sign in</button>
+      </header>
+      <nav aria-label="Main">
+        <a href="#/" data-r="home">Home</a
+        ><a href="#/watch/1" data-r="watch">Watch</a
+        ><a href="#/library" data-r="library">Library</a>
+      </nav>
+    </div>
+    <main id="app"></main>
+    <div class="toast" id="toast" role="status"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
