@@ -4,6 +4,8 @@ A calm, "watch at your pace" video site built from a Figma design. Plain HTML, C
 
 Screens: **Home**, **Watch**, **Library**, and individual **Channel** pages (hash routes: `#/`, `#/watch/1`, `#/library`, `#/channel/HG`).
 
+The interface can be switched between English, Spanish, French, and Traditional Chinese. The selected language is saved in the browser.
+
 ## Run locally
 
 The Node.js server serves the site and its same-origin anonymous metrics API. Node.js 18 or newer is recommended. No packages need to be installed.
@@ -20,6 +22,7 @@ then visit http://localhost:4173. The server listens on `127.0.0.1` by default. 
 index.html     page markup (latest: v4)
 style.css      all styles
 app.js         data, routing and rendering
+i18n.js        interface translations and language switching
 server.js      static-file server and aggregate metrics API
 images/        thumbnails cropped from the Figma export
 versions/      earlier single-file iterations, for reference
@@ -35,6 +38,7 @@ versions/      earlier single-file iterations, for reference
 - Signed-in demo users can use the avatar menu for profile information, their videos, saved videos, watch history, subscriptions, and sign out.
 - A fixed Back to top button returns to the main navigation.
 - Main navigation, account, video, and Library actions include hover descriptions explaining what they do.
+- Use the language selector in the header to switch between English, Spanish, French, and Traditional Chinese. Your choice is saved on this device.
 - Usability metrics are opt-in. GoodView counts route backtracking, Backspace/Delete presses in search and sign-in fields, and sign-in/profile dialog dismissals. It never sends typed text, credentials, account details, or browser identifiers. Counts from consenting visitors are combined in `.data/metrics.json`; this file is excluded from version control. Turning sharing off stops future counts, but already-combined totals cannot be separated by visitor.
 - View the combined counts and change the consent choice in Library → Usability metrics. Keep the Node server running for metrics collection and to view the server's totals.
 - Headings use Lora and body text uses Inter, loaded from Google Fonts (system fonts are the offline fallback).

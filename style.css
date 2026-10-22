@@ -92,6 +92,23 @@ header {
   justify-self: end;
   gap: 10px;
 }
+.language-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mute);
+  font-size: 12px;
+}
+.language-control select {
+  min-height: 42px;
+  max-width: 132px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+}
 .account-menu-wrap {
   position: relative;
 }
@@ -843,6 +860,36 @@ section {
   }
 }
 @media (max-width: 520px) {
+  header {
+    gap: 8px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+  .account-actions {
+    gap: 6px;
+  }
+  .language-control > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .language-control select {
+    max-width: 108px;
+    padding-right: 4px;
+    padding-left: 6px;
+    font-size: 12px;
+  }
+  .signin {
+    padding-right: 9px;
+    padding-left: 9px;
+    font-size: 12px;
+  }
   .back-to-top {
     right: max(14px, env(safe-area-inset-right));
     bottom: max(14px, env(safe-area-inset-bottom));

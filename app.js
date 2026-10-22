@@ -138,12 +138,14 @@ const METRIC_LABELS = {
   formCorrections: "Sign-in correction keys",
   dialogDismissals: "Dialog dismissals",
 };
+const SUPPORTED_LANGUAGES = ["en", "es", "fr", "zh-TW"];
 /* ---------- STATE (saved in this browser only) ---------- */
 const S = Object.assign(
   {
     user: false,
     guestNoticeDismissed: false,
     metricsConsent: null,
+    language: "en",
     pendingMetrics: {},
     autoplay: false,
     subs: ["HG", "PH", "ST"],
@@ -201,6 +203,7 @@ S.pendingMetrics = Object.fromEntries(
       : 0,
   ]),
 );
+if (!SUPPORTED_LANGUAGES.includes(S.language)) S.language = "en";
 const save = () => {
   try {
     localStorage.gv = JSON.stringify(S);
@@ -208,7 +211,7 @@ const save = () => {
 };
 const toast = (m) => {
   const t = document.getElementById("toast");
-  t.textContent = m;
+  t.textContent = goodviewTranslate(m, S.language);
   t.classList.add("on");
   clearTimeout(toast.h);
   toast.h = setTimeout(() => t.classList.remove("on"), 2200);
@@ -221,7 +224,8 @@ const openLogin = () => {
 function setMetricsStatus(message, retry = false) {
   const status = document.getElementById("metrics-sync-status");
   status.hidden = !message;
-  document.getElementById("metrics-sync-message").textContent = message;
+  document.getElementById("metrics-sync-message").textContent =
+    goodviewTranslate(message, S.language);
   document.getElementById("metrics-retry").hidden = !retry;
 }
 function trackMetric(event) {
@@ -293,7 +297,7 @@ async function loadMetricsDashboard() {
   const status = document.getElementById("metrics-dashboard-status");
   const counts = document.getElementById("metrics-counts");
   if (!status || !counts) return;
-  status.textContent = "Loading anonymous totals…";
+  status.textContent = goodviewTranslate("Loading anonymous totals…", S.language);
   try {
     const response = await fetch("/api/metrics", { cache: "no-store" });
     if (!response.ok) {
@@ -302,12 +306,18 @@ async function loadMetricsDashboard() {
     const data = await response.json();
     counts.innerHTML = METRIC_EVENTS.map(
       (event) =>
-        `<div><dt>${METRIC_LABELS[event]}</dt><dd>${Number.isSafeInteger(data.counts?.[event]) ? data.counts[event] : 0}</dd></div>`,
+        `<div><dt>${goodviewTranslate(METRIC_LABELS[event], S.language)}</dt><dd>${Number.isSafeInteger(data.counts?.[event]) ? data.counts[event] : 0}</dd></div>`,
     ).join("");
-    status.textContent = "These are combined totals from this GoodView server.";
+    status.textContent = goodviewTranslate(
+      "These are combined totals from this GoodView server.",
+      S.language,
+    );
     setMetricsStatus("");
   } catch (error) {
-    status.textContent = "The anonymous totals are unavailable. Check that the GoodView server is running.";
+    status.textContent = goodviewTranslate(
+      "The anonymous totals are unavailable. Check that the GoodView server is running.",
+      S.language,
+    );
     setMetricsStatus(
       "Usability metrics could not be loaded. Start GoodView with node server.js, then try again.",
       true,
@@ -326,7 +336,12 @@ const guest = (l = "Sign in") =>
 /* ---------- VIEWS ---------- */
 function home(q) {
   const list = V.filter(
-    (v) => v.id <= 4 && (!q || (v.t + CH[v.ch].n).toLowerCase().includes(q)),
+    (v) =>
+      v.id <= 4 &&
+      (!q ||
+        `${goodviewTranslate(v.t, S.language)} ${goodviewTranslate(CH[v.ch].n, S.language)}`
+          .toLowerCase()
+          .includes(q)),
   );
   return `<div class="hero"><div><div class="kicker">Today's good watching</div><h1>Take your time. You're in control.</h1><p>A calm collection of useful, interesting videos—chosen for quality, not clicks.</p></div>
  <button class="pick" data-go="9" aria-label="Watch Editor's pick: A year in a cottage garden" title="Open the featured cottage-garden video on its watch page.">${th(byId(9))}<span class="pick-copy"><small class="eb">Editor's pick</small><b>A year in a cottage garden</b><small>14 minutes · Home & Garden</small></span></button></div>
@@ -348,7 +363,9 @@ function channelVideoList(channelId, query = "") {
     (v) =>
       v.ch === channelId &&
       (!normalizedQuery ||
-        `${v.t} ${v.by} ${v.meta}`.toLowerCase().includes(normalizedQuery)),
+        `${goodviewTranslate(v.t, S.language)} ${goodviewTranslate(v.by, S.language)} ${goodviewTranslate(v.meta, S.language)}`
+          .toLowerCase()
+          .includes(normalizedQuery)),
   );
   return videos.length
     ? `<div class="grid">${videos.map(card).join("")}</div>`
@@ -532,6 +549,7 @@ function render() {
             : home(q);
   document.getElementById("metrics-consent").hidden =
     S.metricsConsent !== null;
+  document.getElementById("language-select").value = S.language;
   if (route === "library" && tab === "metrics") {
     loadMetricsDashboard();
   }
@@ -544,7 +562,14 @@ function render() {
           ? "Your videos"
         : route[0].toUpperCase() + route.slice(1)) +
     " – GoodView · v4 – Formatted and split";
+  applyGoodViewLanguage(S.language, document.title);
 }
+document.getElementById("language-select").addEventListener("change", (e) => {
+  if (!SUPPORTED_LANGUAGES.includes(e.target.value)) return;
+  S.language = e.target.value;
+  save();
+  render();
+});
 let navigationHistory = [location.hash || "#/"];
 addEventListener("hashchange", () => {
   const current = location.hash || "#/";
