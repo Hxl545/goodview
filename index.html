@@ -34,16 +34,94 @@
           type="search"
           placeholder="Search videos"
           aria-label="Search videos"
+          title="Search video titles and channels. Results update as you type."
         />
-        <button class="btn red signin" id="signin">Sign in</button>
+        <div class="account-actions">
+          <div class="account-menu-wrap" id="account-menu-wrap" hidden>
+            <button
+              class="avatar-button"
+              id="account-menu-button"
+              type="button"
+              aria-label="Open account menu"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="account-menu"
+              title="Open shortcuts to your profile, videos, library, and sign-out."
+            >GV</button>
+            <div class="account-menu" id="account-menu" role="menu" aria-label="Account actions" hidden>
+              <div class="account-menu-heading">
+                <span class="account-menu-avatar">GV</span>
+                <span><strong>GoodView member</strong><small>Demo account</small></span>
+              </div>
+              <button type="button" role="menuitem" data-account-action="profile" title="View your local demo profile.">Profile</button>
+              <button type="button" role="menuitem" data-account-action="videos" title="View videos uploaded to your account.">Your videos</button>
+              <button type="button" role="menuitem" data-account-action="saved" title="Open videos you saved to watch later.">Saved videos</button>
+              <button type="button" role="menuitem" data-account-action="history" title="Review videos watched on this device.">Watch history</button>
+              <button type="button" role="menuitem" data-account-action="subscriptions" title="Manage channels you follow.">Subscriptions</button>
+              <button type="button" role="menuitem" data-account-action="metrics" title="View anonymous usability counts and change your sharing choice.">Usability metrics</button>
+              <button class="account-menu-signout" type="button" role="menuitem" data-account-action="signout" title="Sign out of this demo account.">Sign out</button>
+            </div>
+          </div>
+          <button class="btn red signin" id="signin" title="Open the demo sign-in form. No account is required to browse.">Sign in</button>
+        </div>
       </header>
-      <nav aria-label="Main">
-        <a href="#/" data-r="home">Home</a
-        ><a href="#/watch/1" data-r="watch">Watch</a
-        ><a href="#/library" data-r="library">Library</a>
+      <nav id="main-navigation" aria-label="Main" tabindex="-1">
+        <a href="#/" data-r="home" title="Return to today's recommendations and channels.">Home</a
+        ><a href="#/watch/1" data-r="watch" title="Watch the featured video.">Watch</a
+        ><a href="#/library" data-r="library" title="Open saved videos, watch history, and subscriptions.">Library</a>
       </nav>
     </div>
+    <section class="metrics-consent" id="metrics-consent" aria-labelledby="metrics-consent-title" hidden>
+      <div>
+        <h2 id="metrics-consent-title">Help us make GoodView easier to use?</h2>
+        <p>With your permission, we count Back navigation, correction-key presses, and dialog dismissals. Counts are combined across visitors. We never collect typed text, account details, or browser identifiers. You can change your choice in Library under Usability metrics.</p>
+      </div>
+      <div class="metrics-consent-actions">
+        <button class="btn red" type="button" data-metrics-consent="allow">Allow anonymous counts</button>
+        <button class="btn" type="button" data-metrics-consent="decline">No thanks</button>
+      </div>
+    </section>
+    <div class="metrics-sync-status" id="metrics-sync-status" role="status" aria-live="polite" hidden>
+      <span id="metrics-sync-message"></span>
+      <button class="btn sm" id="metrics-retry" type="button" hidden>Try again</button>
+    </div>
     <main id="app"></main>
+    <dialog class="login-dialog" id="login-dialog" aria-labelledby="login-title" aria-describedby="login-notice">
+      <div class="login-heading">
+        <div>
+          <p class="eb">WELCOME TO GOODVIEW</p>
+          <h2 id="login-title">Sign in</h2>
+        </div>
+        <button class="login-close" type="button" data-close-login aria-label="Close sign-in window" title="Close this window and return to browsing.">×</button>
+      </div>
+      <p class="login-intro">Save your videos and pick up where you left off.</p>
+      <p class="login-notice" id="login-notice">Demo only: your details are not checked or sent anywhere. Please do not enter a real password.</p>
+      <form class="login-form" id="login-form" autocomplete="off">
+        <label for="login-email">Email address</label>
+        <input id="login-email" name="email" type="email" autocomplete="off" required autofocus title="Enter an email address for the local demo sign-in." />
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" autocomplete="new-password" required title="Any password works in this local demo. Do not enter a real password." />
+        <button class="btn red login-submit" type="submit" title="Continue into the demo with the entered details.">Sign in to demo</button>
+        <button class="btn login-guest" type="button" data-act="guest" title="Browse without an account and dismiss the guest notice.">Continue as a guest</button>
+      </form>
+    </dialog>
+    <dialog class="profile-dialog" id="profile-dialog" aria-labelledby="profile-title">
+      <div class="login-heading">
+        <div>
+          <p class="eb">YOUR PROFILE</p>
+          <h2 id="profile-title">GoodView member</h2>
+        </div>
+        <button class="login-close" type="button" data-close-profile aria-label="Close profile" title="Close your profile and return to the page.">×</button>
+      </div>
+      <p class="profile-description">This is a local demo account. Your profile details are not connected to an online account.</p>
+      <button class="btn profile-done" type="button" data-close-profile title="Close your profile and return to the page.">Done</button>
+    </dialog>
+    <button class="back-to-top" id="back-to-top" type="button" aria-label="Back to top, main navigation" title="Scroll back to the main navigation at the top of the page.">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+      <span>Back to top</span>
+    </button>
     <div class="toast" id="toast" role="status"></div>
 
     <script src="app.js"></script>
